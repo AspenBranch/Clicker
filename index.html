@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>Clicker</title>
+	<link href="https://fonts.googleapis.com/css?family=Quicksand|Material+Icons|Roboto:400,500,600|Google+Sans:400,500|Roboto+Mono" rel="stylesheet" />
+	<style>
+		html,
+		body {
+			font-family: "Google Sans";
+			height: 100%;
+			width: 100%;
+			margin: 0;
+		}
+
+		@keyframes panim {
+			0% {
+				opacity: 0;
+			}
+		}
+
+		.left {
+			float: left;
+		}
+
+		.right {
+			float: right;
+		}
+
+		.center {
+			text-align: center;
+		}
+
+		.text-p {
+			padding: 35px 50px;
+		}
+
+		.no-select {
+			/*https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting*/
+			-webkit-user-select: none;
+			/* Safari */
+			-khtml-user-select: none;
+			/* KHTML */
+			-moz-user-select: none;
+			/* Older Firefox */
+			-ms-user-select: none;
+			/* IE */
+			user-select: none;
+			/* Chrome, Edge, Opera and Firefox */
+		}
+
+		.p {
+			line-height: 25px;
+			font-size: 14px;
+			font-family: "Roboto", sans-serif;
+			color: #616161;
+			font-weight: 400;
+		}
+
+		.p b {
+			font-weight: 500;
+		}
+
+		.p a {
+			color: #ef0078;
+			text-decoration: underline;
+		}
+
+		.p a:hover {
+			color: #c7006e;
+		}
+
+		hr {
+			border: none;
+			background-color: gainsboro;
+			height: 0.1px;
+		}
+
+		header {
+			border-bottom: 1px solid gainsboro;
+			height: 60px;
+			line-height: 60px;
+			z-index: 11;
+		}
+
+		/* game header icons */
+		#game header h3 {
+			margin-top: 0;
+			padding: 0 15px;
+			color: #616161;
+			font-weight: 500;
+		}
+
+		header .hd-btn {
+			position: relative;
+			top: 5px;
+			padding: 0 15px;
+			color: #616161;
+			font-weight: 500;
+		}
+
+		header .hd-btn:hover {
+			color: #565656;
+		}
+
+		/* shop header icons */
+
+		#home {
+			background: white;
+			color: black;
+			text-align: center;
+			overflow: hidden;
+			box-shadow: inset 0px -20px 200px rgba(237, 5, 67, 0.2);
+			height: 100%;
+			width: 100%;
+		}
+
+		button {
+			font-family: "roboto mono";
+		}
+
+		:focus {
+			outline: none;
+		}
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		input[type=number] {
+			-moz-appearance: textfield;
+		}
+
+		.btn {
+			background: #D81B60;
+			color: white;
+			border: none;
+			padding: 0 100px;
+			height: 40px;
+			font-size: 16px;
+			text-transform: uppercase;
+			letter-spacing: 0px;
+			font-weight: 400;
+			box-shadow: 0px 3px 2px rgba(0, 0, 0, 0.17);
+			transition: padding 0.2s, background 0.1s, transform 0.1s;
+		}
+
+		.btn:hover {
+			background: #e81B60;
+			cursor: pointer;
+		}
+
+		.btn:active {
+			background: #d81B60;
+			transform: scale(0.95);
+		}
+
+		.btn-normie {
+			font-family: "Roboto";
+			font-weight: 500;
+			height: 36px;
+			padding: 0 16px;
+			min-width: 64px;
+			border: none;
+			background: #F5F5F5;
+			color: #000;
+			text-transform: uppercase;
+			font-weight: 500;
+			font-size: 0.8754rem;
+			letter-spacing: 0.089em;
+			text-indent: 0.089em;
+			border-radius: 4px;
+			box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+			vertical-align: middle;
+			transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+			transition: all 0.2s;
+		}
+
+		.btn-normie:hover {
+			background: #EEEEEE;
+			cursor: pointer;
+			box-shadow: 0 2px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+		}
+
+		.btn-normie:active {
+			background: #E0E0E0;
+			box-shadow: 0 2px 1px -2px rgba(0, 0, 0, 0.4), 0 3px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+			transition: all 0.115s;
+		}
+
+		#game {
+			overflow: hidden;
+		}
+
+		#game #spotlight {
+			margin-left: 25%;
+			margin-right: 25%;
+			margin-top: calc(25% - 61px);
+			margin-bottom: 25%;
+			text-align: center;
+		}
+
+		#game #spotlight #theBtn {
+			/*background: #E91E63;*/
+			background: white;
+			/*border: none;*/
+			border: 3px solid #E91E63;
+			border-radius: 50%;
+			width: 100px;
+			height: 100px;
+			transition: transform 0.1s;
+		}
+
+		#game #spotlight #theBtn i.material-icons {
+			color: #E91E63;
+			font-size: 35px;
+			position: relative;
+			top: 5px;
+		}
+
+		#game #spotlight #theBtn:hover {
+			cursor: pointer;
+			transform: scale(1.05);
+		}
+
+		#game #spotlight #theBtn:active {
+			transform: scale(0.95);
+		}
+
+		#game #stats {
+			position: absolute;
+			top: 61px;
+			bottom: 51px;
+			border-right: 1px solid gainsboro;
+			width: 35%;
+		}
+
+		#game #stats h3 {
+			color: #616161;
+			font-weight: 500;
+			font-size: 15px;
+			padding-left: 17px;
+		}
+
+		#shop #shop-shops {
+			margin-top: 25px;
+		}
+
+		#shop .shopgrade {
+			border: 1px solid gainsboro;
+			margin-bottom: 10px;
+			padding: 0 25px;
+		}
+
+		#shop .shopgrade h4 {
+			font-weight: normal;
+			color: #616161;
+		}
+
+		#shop .shopgrade:hover {
+			cursor: pointer;
+			background: rgb(247, 247, 247);
+		}
+
+		/* toast bar */
+		#toast-el {
+			background-color: #333;
+			border-radius: 3px;
+			font-family: "Google Sans";
+			letter-spacing: .5px;
+			font-size: 15px;
+			color: white;
+
+			position: fixed;
+			left: 25px;
+			bottom: 25px;
+			z-index: 101;
+			visibility: hidden;
+
+			min-width: 144px;
+			padding: 12px 16px;
+			box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
+
+			cursor: pointer;
+		}
+
+		#toast-el.visible {
+			visibility: visible;
+			animation: toastStart 0.15s, toastEnd 0.15s calc(1.0s - 0.15s);
+		}
+
+		@keyframes toastStart {
+			0% {
+				transform: scale(0.85);
+				opacity: 0.5;
+			}
+
+			100% {
+				transform: scale(1);
+				opacity: 1;
+			}
+		}
+
+		@keyframes toastEnd {
+			0% {
+				transform: scale(1);
+				opacity: 1;
+			}
+
+			100% {
+				transform: scale(0.95);
+				opacity: 0;
+			}
+		}
+
+		/* dialog css */
+		.dialog {
+			position: fixed;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.6);
+			opacity: 0;
+			visibility: hidden;
+			transform: scale(1.025);
+			transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+			z-index: 100;
+		}
+
+		.dialog-content {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: white;
+			padding: 1rem 1.5rem;
+			width: 24rem;
+			border-radius: 4px;
+		}
+
+		.close-button {
+			float: right;
+			width: .91rem;
+			line-height: .91rem;
+			text-align: center;
+			cursor: pointer;
+			color: #616161;
+		}
+
+		.close-button:hover {
+			color: #000;
+		}
+
+		.show-dialog {
+			opacity: 1;
+			visibility: visible;
+			transform: scale(1);
+			transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+		}
+
+		.dialog #bet-input {
+			background-color: white;
+			border: 1px solid gainsboro;
+			font-family: "Roboto", arial;
+			font-size: 15.6px;
+			font-weight: 400;
+			border-radius: 4px;
+			height: 2em;
+			padding: 0 14px 0 14px;
+			color: #616161;
+			transition: border-color .56s;
+		}
+
+		.dialog #bet-input:focus {
+			border-color: rgb(191, 191, 191);
+		}
+
+
+		/* congrats-you-won... page */
+		#win-win {
+			background: #FAFAFA;
+			height: 100%;
+			width: 100%;
+			color: #121212;
+		}
+
+		/* leaderboard containers */
+		.lead-con {
+			background: white;
+			padding: 7px 20px;
+			box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.05), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+			/*box-shadow: inset -10px -20px 50px rgba(0, 0, 0, 0.09);*/
+			border: none;
+			margin-bottom: 5px;
+			border-radius: 3px;
+			overflow-wrap: break-word;
+			white-space: normal;
+			position: relative;
+			margin-bottom: 25px;
+		}
+
+		.lead-con h4 {
+			color: #333;
+			font-weight: 500;
+		}
+
+		.lead-con img {
+			border: 2.5px solid rgb(207, 207, 207);
+			border-radius: 50%;
+			padding: 5px 5px;
+			vertical-align: middle;
+			width: 30px;
+			height: 30px;
+			margin: 0 10px 0 0;
+		}
+
+		.lead-con:nth-child(1) h4 #ld-user:after {
+			content: "emoji_events";
+			font-family: "Material Icons";
+			color: #FF8F00;
+			margin-left: 10px;
+		}
+
+		.lead-con:nth-child(2) h4 #ld-user:after {
+			content: "emoji_events";
+			font-family: "Material Icons";
+			color: rgb(130, 130, 130);
+			margin-left: 10px;
+		}
+
+		.lead-con:nth-child(3) h4 #ld-user:after {
+			content: "emoji_events";
+			font-family: "Material Icons";
+			color: #CD7F32;
+			margin-left: 10px;
+		}
+
+		.codeblock {
+			background: rgb(255, 255, 255);
+			border: 1px solid gainsboro;
+			border-radius: 4px;
+			display: flex;
+			padding: 15px 25px;
+			margin: 15px 0;
+			font-family: "Roboto mono", monospace;
+			font-size: 14px;
+			color: #616161;
+		}
+
+		/* footer */
+		footer {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 50px;
+			border-top: 1px solid gainsboro;
+		}
+
+		footer .ft-btn {
+			position: relative;
+			top: 15px;
+			padding: 0 15px;
+			color: #616161;
+			font-weight: 500;
+		}
+
+		footer .ft-btn:hover {
+			color: #565656;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- menu -->
+	<div class="scene no-select" id="home">
+		<h1 style="padding-top: 50px;font-size:70px;margin-bottom:10px;letter-spacing:5px;">energy</h1>
+		<p style="position: relative;top:-15px;height:0px;color:rgb(128, 128, 128);letter-spacing:4px;">&ldquo;the ultimate clicker&rdquo;</p>
+		<button class="btn" onclick="javascript:switchScene(1);startGame();">PLAY</button>
+
+		<footer style="border-top:none;">
+			<p style="font-family: sans-serif,'roboto';font-size:14px;color:rgb(107, 101, 103);position:relative;top:15px;letter-spacing:.5px;">&copy;2023 LeaferStudios Programming</p>
+		</footer>
+	</div>
+
+	<!-- game -->
+	<div class="scene no-select" id="game">
+		<header>
+			<div class="left">
+				<a class="hd-btn" href="javascript: switchScene(4);" style="text-decoration:none;">
+					<i class="material-icons">leaderboard</i>
+				</a>
+			</div>
+
+			<div class="center" style="margin-right: 50px;">
+				<h3 id="pts-con">$0</h3>
+			</div>
+
+			<div class="right" style="margin-top: -75px;">
+				<a class="hd-btn" href="javascript: switchScene(2);">
+					<i class="material-icons">shopping_cart</i>
+				</a>
+			</div>
+		</header>
+
+		<div id="stats">
+			<h3 style="padding-top: 25%;">MPC: <span id="mpc-con">$1</span></h3>
+			<h3>MPS: <span id="mps-con">$0</span></h3>
+			<h3>Timer: <span id="time-con">00:00:00</span></h3>
+		</div>
+
+		<div id="spotlight">
+			<button id="theBtn">
+				<i class="material-icons">flash_on</i>
+			</button>
+		</div>
+
+		<footer>
+			<div class="left">
+				<a class="ft-btn" href="javascript: saveNow();">
+					<i class="material-icons">download</i>
+				</a>
+			</div>
+
+			<div class="right">
+				<a class="ft-btn" href="javascript: switchScene(3);">
+					<i class="material-icons">not_listed_location</i>
+				</a>
+			</div>
+		</footer>
+	</div>
+
+	<!-- shop -->
+	<div class="scene" id="shop">
+		<header style="position: fixed;left: 0;right:0;background: white;">
+			<div class="left">
+				<a class="hd-btn" href="javascript: switchScene(1);">
+					<i class="material-icons">navigate_before</i>
+				</a>
+			</div>
+
+			<div class="right">
+				<span style="padding-right: 15px" id="shop-money-reminder">
+					$0
+				</span>
+			</div>
+		</header>
+
+		<div style="height: 60px"></div>
+
+		<div class="text-p">
+			<h1 style="font-weight:500;">Shop</h1>
+
+			<p class="p" style="margin-top:-11px;margin-bottom:20px;">Upgrade your stats here!</p>
+
+			<button class="btn-normie dialog-trigger">Gamble</button>
+
+			<div id="shop-shops"></div>
+		</div>
+	</div>
+
+	<!-- help -->
+	<div class="scene" id="help">
+		<header style="position: fixed;left: 0;right:0;background: white;">
+			<div class="left">
+				<a class="hd-btn" href="javascript: switchScene(1);">
+					<i class="material-icons">navigate_before</i>
+				</a>
+			</div>
+		</header>
+
+		<div style="height: 60px"></div>
+
+		<div class="text-p">
+			<h1 style="font-weight:500;">Help</h1>
+			<p class="p" style="margin-top:-6px">
+				<b>Objective:</b> get enough money to buy the hacker upgrade. This upgrade will cheat the otherwise forever-playing game. Buy the hacker upgrade and you win!
+				<br /><br />
+				<b>Upgrades:</b> click the shop icon on the top right corner of the screen. Each upgrade costs money. You can upgrade your mps (money per second) and mpc (money per click).<br><em>Note: some upgrades are better than others, even if they cost cheaper.</em>
+				<br /><br />
+				<b>Gambling:</b> You must have at least $10,000 to gamble. The range of the amount of money you bet is from $100 to $9,999. If you win you earn the amount of money you betted, while if you lose you lose ALL of your money...
+				<br /><br />
+
+				<b>Leaderboard:</b> Just tell me or tell someone who knows me. Sorry no API
+			</p>
+			<p class="p">That's the end of the help section, contact me for any other questions</p>
+		</div>
+	</div>
+
+	<!-- leaderboard -->
+	<div class="scene" id="ledr-bord">
+		<header style="position: fixed;left: 0;right:0;background: white;">
+			<div class="left">
+				<a class="hd-btn" href="javascript: switchScene(1);">
+					<i class="material-icons">navigate_before</i>
+				</a>
+			</div>
+		</header>
+
+		<div style="height: 60px"></div>
+
+		<div class="text-p">
+			<h1 style="font-weight:500;">Leaderboard</h1>
+			<p class="p" style="margin-top:-6px;">
+			  Send me a screenshot of your end screen to get on<br>
+			</p>
+      <p>
+        Ask to get here.
+      </p>
+			
+		</div>
+	</div>
+
+	<!-- toast (not scene) -->
+	<div id="toast-el">
+		<span id="toast-inner">Hi</span>
+	</div>
+
+	<!-- dialog (not scene) -->
+	<div class="dialog">
+		<div class="dialog-content">
+			<span class="close-button">×</span>
+			<h2 style='font-weight: 500;'>How much?</h2>
+			<p style='color: #616161;font-size: 14px;margin-top: -10px;'>Please input an amount of money you would like to bet on.</p>
+			<input id='bet-input' placeholder='Enter a number...' type="number" onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 ? true : !isNaN(Number(event.key))">
+			<button id='bet-button' class="btn-normie" style="background: white;border:1px solid gainsboro; box-shadow: none;">Bet</button>
+			<br><br>
+			<a href="javascript: switchScene(3);toggledialog();" style="float: right; color: #616161;" title="Help"><i class="material-icons" style="font-size: 16px;">help</i></a>
+		</div>
+	</div>
+
+	<!-- win -->
+	<div class="scene center" id="win-win">
+		<h1 class="center" style="margin: 0;padding-top: 20%;font-size: 50px;letter-spacing: 2px;">YOU WIN!</h1>
+
+		<p class="center">Time Code: <span id="time-code"></span></p>
+
+		<!--<svg width="200px" height="150px" style="background:inherit;">
+                <circle cx="95" cy="82" r="4" fill="rgb(145, 255, 152)" />
+                <circle cx="100" cy="72" r="4" fill="rgb(204, 234, 255)" />
+                <circle cx="90" cy="72" r="4" fill="rgb(255, 204, 204)" />
+                <circle cx="85" cy="62" r="4" fill="rgb(158, 234, 255)" />
+                <circle cx="105" cy="62" r="4" fill="rgb(170, 250, 188)" />
+                <circle cx="95" cy="62" r="4" fill="rgb(255, 231, 135)" />
+                <polygon points="70, 50, 95, 105, 120, 50" fill="none" stroke="rgb(209, 209, 209)" stroke-width="3"/>
+            </svg>-->
+
+		<a href="https://www.khanacademy.org/computer-programming/sub-to-leaferstudios-latest/4934504502870016" target="_blank"><button class="btn-normie" style="width: 220px;background:#E91E63;color:white;">Subscribe</button></a>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.3/dist/html2canvas.min.js"></script>
+	<script type="application/javascript">
+		try {
+
+			id = (el) => document.getElementById(el);
+			cls = (el) => document.getElementsByClassName(el);
+			tag = (el) => document.getElementsByTagName(el);
+
+			//{
+
+			let winGame = saveCode[3];
+			let timeSince = saveCode[4];
+			let comingBack = saveCode[5];
+			let game_started = false;
+			//let timeCode = [];
+
+			// stats object
+			let stats = {
+				money: saveCode[0],
+				mpc: saveCode[1],
+				mps: saveCode[2],
+			};
+
+			// upgrade helper functions
+			let upgrades = {
+				upgradeMPC(amount) {
+					return stats.mpc += amount;
+				},
+				upgradeMPS(amount) {
+					return stats.mps += amount;
+				}
+			};
+
+			// actual upgrades
+			/*let shopgrades = [
+			    {
+			        title: "Basic <span style='color:#1976D2;'>MPC</span>",
+			        cost: 10,
+			        _mpcPlus: 1,
+			        _mpsPlus: 0,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "Sophisticated <span style='color:#1976D2;'>MPC</span>",
+			        cost: 50,
+			        _mpcPlus: 5,
+			        _mpsPlus: 0,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "Ultra <span style='color:#1976D2;'>MPC</span>",
+			        cost: 100,
+			        _mpcPlus: 10,
+			        _mpsPlus: 0,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "Pro <span style='color:#1976D2;'>MPC</span>",
+			        cost: 200,
+			        _mpcPlus: 20,
+			        _mpsPlus: 0,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "Wizard <span style='color:#1976D2;'>MPC</span>",
+			        cost: 1000,
+			        _mpcPlus: 100,
+			        _mpsPlus: 0,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "Black Hole <span style='color:#1976D2;'>MPC</span>",
+			        cost: 5000,
+			        _mpcPlus: 500,
+			        _mpsPlus: 0,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "Basic <span style='color: #00695C;'>MPS</span>",
+			        cost: 500,
+			        _mpcPlus: 0,
+			        _mpsPlus: 1,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "Cool <span style='color: #00695C;'>MPS</span>",
+			        cost: 1000,
+			        _mpcPlus: 0,
+			        _mpsPlus: 2,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "Mega <span style='color: #00695C;'>MPS</span>",
+			        cost: 4000,
+			        _mpcPlus: 0,
+			        _mpsPlus: 4,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "Rich <span style='color: #00695C;'>MPS</span>",
+			        cost: 10000,
+			        _mpcPlus: 0,
+			        _mpsPlus: 20,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "<span style='color: #5E35B1;'>Hybrid</span> Basic",
+			        cost: 1500,
+			        _mpcPlus: 15,
+			        _mpsPlus: 15,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "<span style='color: #5E35B1;'>Hybrid</span> Ultra",
+			        cost: 20000,
+			        _mpcPlus: 1000,
+			        _mpsPlus: 40,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "<span style='color: #5E35B1;'>Hybrid</span> Super",
+			        cost: 50000,
+			        _mpcPlus: 5000,
+			        _mpsPlus: 100,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "Basic <span style='color: #AD1457;'>Worker</span>",
+			        cost: 250000,
+			        _mpcPlus: 0,
+			        _mpsPlus: 1000,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "Super <span style='color: #AD1457;'>Worker</span>",
+			        cost: 1000000,
+			        _mpcPlus: 0,
+			        _mpsPlus: 4000,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "<span style='color: #fff;background:black;padding:0 5px;'>Web Developer</span>",
+			        cost: 2000000,
+			        _mpcPlus: 1,
+			        _mpsPlus: 8000,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "<span style='color: #fff;background:black;padding:0 5px;'>Full Stack Developer</span>",
+			        cost: 5000000,
+			        _mpcPlus: 2,
+			        _mpsPlus: 20000,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        }
+			    },
+			    {
+			        title: "<span style='color:#333;background:#fff;border:2px solid #333;padding:0 15px;border-radius:50px;'>HACKER 🐱‍💻</span>",
+			        cost: 1000000000,
+			        _mpcPlus: Infinity,
+			        _mpsPlus: Infinity,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			            
+			            winGame = true;
+			            saveCode[3] = true;
+			        }
+			    },
+			]; */
+			/*let shopgrades = [
+			    {
+			        title: "<span style='color: #616161;'>Common Energy</span>",
+			        cost: 10,
+			        _mpcPlus: 1,
+			        _mpsPlus: 0,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: #616161;'>Static</span>",
+			        cost: 50,
+			        _mpcPlus: 5,
+			        _mpsPlus: 0,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: #558B2F;'>Bolt X</span>",
+			        cost: 100,
+			        _mpcPlus: 10,
+			        _mpsPlus: 0,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: #616161;'>Tiny Helper</span>",
+			        cost: 250,
+			        _mpcPlus: 0,
+			        _mpsPlus: 1,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: #558B2F;'>Lazy Worker</span>",
+			        cost: 500,
+			        _mpcPlus: 0,
+			        _mpsPlus: 2,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: #558B2F;'>Hard Worker</span>",
+			        cost: 1200,
+			        _mpcPlus: 0,
+			        _mpsPlus: 5,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: #0277BD'>Hybrid Workforce</span>",
+			        cost: 2000,
+			        _mpcPlus: 25,
+			        _mpsPlus: 10,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: #0277BD'>Lightning Cannon</span>",
+			        cost: 2000,
+			        _mpcPlus: 50,
+			        _mpsPlus: 0,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: rgb(189, 149, 19);'>Super Charge</span>",
+			        cost: 5000,
+			        _mpcPlus: 0,
+			        _mpsPlus: 50,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: rgb(189, 149, 19);'>Tesla Coil</span>",
+			        cost: 10000,
+			        _mpcPlus: 10,
+			        _mpsPlus: 100,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: rgb(189, 149, 19);'>Hyrdo Dam</span>",
+			        cost: 50000,
+			        _mpcPlus: 0,
+			        _mpsPlus: 1000,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: rgb(189, 149, 19);'>Solar Windmill</span>",
+			        cost: 25000,
+			        _mpcPlus: 0,
+			        _mpsPlus: 500,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: rgb(166, 35, 64);'>Power Cannon</span>",
+			        cost: 100000,
+			        _mpcPlus: 1000,
+			        _mpsPlus: 1500,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: rgb(166, 35, 64);'>Mystic Energy</span>",
+			        cost: 500000,
+			        _mpcPlus: 6000,
+			        _mpsPlus: 6000,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: rgb(166, 35, 64);'>Rich Millionare</span>",
+			        cost: 1000000,
+			        _mpcPlus: 12500,
+			        _mpsPlus: 12500,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: rgb(166, 35, 64);'>Programmer 😎</span>",
+			        cost: 2000000,
+			        _mpcPlus: 30000,
+			        _mpsPlus: 20000,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: rgb(255, 255, 255);background:rgb(66, 66, 66);padding:2px 9px;'>Wizard 🧙</span>",
+			        cost: 10000000,
+			        _mpcPlus: 30000,
+			        _mpsPlus: 20000,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: rgb(255, 255, 255);background:rgb(66, 66, 66);padding:2px 9px;'>ALIEN 👽</span>",
+			        cost: 50000000,
+			        _mpcPlus: 100000,
+			        _mpsPlus: 50000,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			        },
+			    },
+			    {
+			        title: "<span style='color: rgb(255, 255, 255);background:rgb(59, 59, 59);padding:2px 9px;'>HACKER ✨</span>",
+			        cost: 100000000,
+			        _mpcPlus: Infinity,
+			        _mpsPlus: Infinity,
+			        onceBought() {
+			            upgrades.upgradeMPC(this._mpcPlus);
+			            upgrades.upgradeMPS(this._mpsPlus);
+			            
+			            winGame = true;
+			            saveCode[3] = true;
+			        },
+			    },
+			]; */
+
+			let shopgrades = [{
+					title: "<span style='color: #616161;'>Common Energy</span>",
+					cost: 50,
+					_mpcPlus: 1,
+					_mpsPlus: 0,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: #616161;'>Bolt X</span>",
+					cost: 100,
+					_mpcPlus: 2,
+					_mpsPlus: 0,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: #616161;'>Whirlpool</span>",
+					cost: 500,
+					_mpcPlus: 5,
+					_mpsPlus: 0,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: #616161;'>Gust</span>",
+					cost: 1000,
+					_mpcPlus: 15,
+					_mpsPlus: 0,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(27, 85, 148);'>Pet Kitty</span>",
+					cost: 250,
+					_mpcPlus: 0,
+					_mpsPlus: 1,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(27, 85, 148);'>Worker</span>",
+					cost: 1000,
+					_mpcPlus: 0,
+					_mpsPlus: 5,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(27, 85, 148);'>Auto-Windmill</span>",
+					cost: 5000,
+					_mpcPlus: 0,
+					_mpsPlus: 15,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(31, 148, 125);'>Tornado</span>",
+					cost: 10000,
+					_mpcPlus: 150,
+					_mpsPlus: 0,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(31, 148, 125);'>Hybrid Tornado</span>",
+					cost: 35000,
+					_mpcPlus: 100,
+					_mpsPlus: 100,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(148, 31, 82);'>Specific Calculation</span>",
+					cost: 49732,
+					_mpcPlus: 162,
+					_mpsPlus: 139,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(31, 148, 125);'>Record Tsunami</span>",
+					cost: 50000,
+					_mpcPlus: 500,
+					_mpsPlus: 0,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(0, 0, 0);'>e = mc<sup>2</sup></span>",
+					cost: 100000,
+					_mpcPlus: 800,
+					_mpsPlus: 800,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(0, 0, 0);'>Energetic Millionare</span>",
+					cost: 1000000,
+					_mpcPlus: 8000,
+					_mpsPlus: 8000,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: darkgoldenrod;'>Sensei</span>",
+					cost: 10000000,
+					_mpcPlus: 80000,
+					_mpsPlus: 0,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(0, 0, 0);'>Robotov</span>",
+					cost: 20000000,
+					_mpcPlus: 1000,
+					_mpsPlus: 50000,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(255, 255, 255);background:rgb(59, 59, 59);padding:2px 9px;'>Code Wizard</span>",
+					cost: 50000000,
+					_mpcPlus: 1000000,
+					_mpsPlus: 0,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(255, 255, 255);background:rgb(59, 59, 59);padding:2px 9px;'>Fusion Reactor</span>",
+					cost: 500000000,
+					_mpcPlus: 20000000,
+					_mpsPlus: 0,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+					},
+				},
+				{
+					title: "<span style='color: rgb(255, 255, 255);background:rgb(59, 59, 59);padding:2px 9px;'>HACKER ✨</span>",
+					cost: 3500000000,
+					_mpcPlus: Infinity,
+					_mpsPlus: Infinity,
+					onceBought() {
+						upgrades.upgradeMPC(this._mpcPlus);
+						upgrades.upgradeMPS(this._mpsPlus);
+
+						winGame = true;
+						saveCode[3] = true;
+					},
+				},
+			];
+
+			let lead_a = [];
+			let banned_lead = ["L"];
+
+			let toastInner = "Snackbar!";
+			//} 
+
+			//{
+			randomNum = (min, max) => Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min)) + Math.ceil(min)); // random num. functions [helper]
+			switchScene = (index) => {
+				//window.scroll(0, 0); 
+				for (let scene = 0; scene < cls("scene").length; scene++) {
+					cls("scene")[scene].style.display = "none";
+					cls("scene")[scene].style.animation = "1s panim forwards";
+				}
+
+				cls("scene")[index].style.display = "block";
+			} // scene switch function [helper]
+			toast = (timeU = 1000) => {
+				let toastEl = id("toast-el");
+				toastEl.className = "visible";
+				toastEl.innerHTML = toastInner;
+				setTimeout(() => {
+					toastEl.className = toastEl.className.replace("visible", "");
+				}, timeU);
+			} // toast "component" [helper]
+			gamble = (amount = 0) => {
+				let coin = Math.floor(Math.random() * 2);
+				if (coin === 0) {
+					stats.money = 0;
+				} else {
+					stats.money += amount;
+				}
+			} // gamble function [helper]
+			toDot = (txt, max, ellipsis) => {
+				return txt.slice(0, max) + (((txt.length > max) && ellipsis) ? "..." : "");
+			} // ellipsis function [helper]
+			formatDate = (dateString) => {
+				const options = {
+					year: "numeric",
+					month: "long",
+					day: "numeric"
+				}
+				return new Date(dateString).toLocaleDateString(undefined, options)
+			}
+			saveCode[4] = timeSince;
+			let timeSince_array = Array.from(String(saveCode[4]), Number);
+			randomString = (len, charSet) => {
+				charSet = charSet || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+				let randomString = [];
+				//Array.prototype.push.apply(tt, randomString);
+				randomString += "leaderboard ";
+				for (let i = 0; i < len; i++) {
+					if (!game_started) {
+						let randomPoz = Math.floor(Math.random() * charSet.length);
+						randomString += charSet.substring(randomPoz, randomPoz + 1);
+					}
+				}
+				for (let j = 0; j < timeSince_array.length / saveCode[4].toString().length; j++) {
+					randomString += saveCode[4];
+					//randomString[Math.floor(Math.random()*randomString.length)].push('3');
+				}
+				//randomString[0] = 3;
+				return randomString;
+			}
+
+			shuffle = (array) => {
+				var m = array.length,
+					t, i;
+				while (m) {
+					i = Math.floor(Math.random() * m--);
+					t = array[m];
+					array[m] = array[i];
+					array[i] = t;
+				}
+				return array;
+			}
+			//} 
+
+			startGame = () => {
+				game_started = true;
+			}
+
+			// update user stats
+			updateStats = () => {
+				id("mpc-con").innerHTML = `$${stats.mpc.toLocaleString()}`;
+				id("mps-con").innerHTML = `$${stats.mps.toLocaleString()}`;
+				id("pts-con").innerHTML = `$${stats.money.toLocaleString()}`;
+				id("shop-money-reminder").innerHTML = `$${stats.money.toLocaleString()}`;
+			}
+
+			// check for bet btn click
+			id("bet-button").addEventListener("click", () => {
+				if (!isNaN(parseInt(id("bet-input").value))) {
+					if (stats.money >= 10000) {
+						if (parseInt(id("bet-input").value) >= 10000) {
+							toastInner = "Amount too high";
+							toast();
+						} else if (parseInt(id("bet-input").value) <= 99) {
+							toastInner = "Amount too low";
+							toast();
+						} else {
+							gamble(parseInt(id("bet-input").value));
+						}
+						updateStats();
+					} else {
+						toastInner = "You dont have enough money to gamble";
+						toast();
+					}
+				} else {
+					toastInner = "Please input a number 🙄";
+					toast();
+				}
+			});
+
+
+			// start timer
+			startTimer = () => {
+				if (game_started) {
+					timeSince++;
+					let hours = Math.floor(timeSince / 3600);
+					let minutes = Math.floor((timeSince - hours * 3600) / 60);
+					let seconds = timeSince - (hours * 3600 + minutes * 60);
+					if (hours < 10) {
+						hours = "0" + hours;
+					}
+					if (minutes < 10) {
+						minutes = "0" + minutes;
+					}
+					if (seconds < 10) {
+						seconds = "0" + seconds;
+					}
+					id("time-con").innerHTML = hours + ":" + minutes + ":" + seconds;
+
+					saveCode[4] = timeSince;
+				}
+			}
+
+			// check win
+
+			//timeCode.push("");
+			checkWin = () => {
+				if (winGame === true) {
+					switchScene(5);
+					game_started = false;
+					//saveCode[4] = timeSince;
+					//timeSince = saveCode[4];
+					//id("time-code").innerHTML = timeCode;
+				}
+			}
+
+
+			// check for click on power button
+			id("theBtn").addEventListener("click", function() {
+				stats.money += stats.mpc;
+				updateStats();
+			});
+
+			// money++
+			incrementMoney = () => {
+				stats.money += stats.mps;
+				updateStats();
+			}
+
+			// shop
+			shop = () => {
+				let shopDiv = id("shop-shops");
+
+				for (let i = 0; i < shopgrades.length; i++) {
+					shopgrades.sort(function(a, b) {
+						return a.cost - b.cost;
+					})
+
+					let _newItemDiv = document.createElement("div");
+					_newItemDiv.innerHTML = `
+                            <div class="shopgrade">
+                                <h4>
+                                    ${shopgrades[i].title}
+                                    <span style="float: right;">$${shopgrades[i].cost.toLocaleString()}</span>
+                                </h4>
+                                
+                                <p style='font-size: 13px;margin-top: -15px;color:#616161;'>+${shopgrades[i]._mpcPlus.toLocaleString()} MPC | +${shopgrades[i]._mpsPlus.toLocaleString()} MPS</p>
+                            </div>
+                        `;
+
+					_newItemDiv.addEventListener("click", function() {
+						if (stats.money >= shopgrades[i].cost) {
+							stats.money -= shopgrades[i].cost;
+							shopgrades[i].onceBought();
+
+							toastInner = "Successfully bought 🎉";
+							toast();
+
+							checkWin();
+						} else {
+							toastInner = "Not enough money 😑";
+							toast();
+						}
+					});
+					shopDiv.appendChild(_newItemDiv);
+				}
+			}
+
+			let dialog = document.querySelector(".dialog");
+			let dialogTrigger = document.querySelector(".dialog-trigger");
+			let closeButton = document.querySelector(".close-button");
+
+			toggledialog = () => dialog.classList.toggle("show-dialog");
+			windowOnClick = (event) => {
+				if (event.target === dialog) toggledialog();
+			}
+
+			dialogTrigger.addEventListener("click", toggledialog);
+			closeButton.addEventListener("click", toggledialog);
+			window.addEventListener("click", windowOnClick);
+
+
+			injectAPI = (data) => {
+				if (data.length > 0) {
+					id("leaderboard").innerHTML = ''; // credit to JettBurns@JettBurns14 for this line
+					lead_a = [];
+
+					for (let i in data) {
+						/*let comment_content = data[i].content;
+						let regexp_data = new RegExp(/\d/g);
+						let finalScore = comment_content.match(regexp_data).join("");*/
+
+						let finalScore = data[i].content.match(/\d/g).join("");
+						let finalUser = toDot(data[i].authorNickname, 10, true);
+						for (let j = 0; j < banned_lead.length; j++) {
+							if (data[i].content.match(/^leaderboard\W/) && data[i].authorNickname != banned_lead[j]) {
+								lead_a.push({
+									user: finalUser,
+									score: finalScore,
+									posted: formatDate(data[i].date),
+									avatarSrc: data[i].authorAvatarSrc,
+								});
+							} else if (data[i].authorNickname === banned_lead[j]) {
+								/* user is banned from leaderboard */
+								//id("leaderboard").innerHTML = "<span style='color:rgb(135, 135, 135)'>Error loading :(</span>";
+							} else {
+								id("leaderboard").innerHTML = "<span style='color:rgb(135, 135, 135)'>Someone has broken the rules of the leaderboard :(</span>";
+							}
+						}
+					}
+
+					for (let j in lead_a) {
+						lead_a.sort(function(a, b) {
+							return a.score - b.score;
+						});
+						id("leaderboard").innerHTML += `
+                            <div class='lead-con'>
+                                <div style='position:absolute;top:10px;left:22px;'>
+                                    <p style='color:#616161;font-size:11px;text-transform:uppercase;font-weight:500;letter-spacing:.5px;'>#${parseInt(j)+1}</p>
+                                </div>
+                                
+                                <div style='display: flex;justify-content:space-between;margin-top:18px;'>
+                                    <h4>
+                                        <img src=${lead_a[j].avatarSrc}>
+                                        <span id='ld-user'>${lead_a[j].user}</span>
+                                    </h4>
+                                    
+                                    <h4 style='align-self: center;'>
+                                        <span>${lead_a[j].score}</span>
+                                    </h4>
+                                </div>
+                                
+                                <div style='position:absolute;top:10px;right:10px;'>
+                                    <p style='color:#616161;font-size:11px;text-transform:uppercase;font-weight:500;letter-spacing:.5px;'>${lead_a[j].posted}</p>
+                                </div>
+                            </div>
+                        `;
+					}
+				} else {
+					id("leaderboard").innerHTML = "<span style='color:rgb(135, 135, 135)'>Leaderboard's empty. Add a score?</span>";
+				}
+			};
+
+			updateStats();
+			switchScene(0);
+			shop();
+
+			setInterval(lead, 1000);
+
+			//let ram = Array.from(randomString(10));                
+			//saveCode[4] = randomString(5);
+			let rs = randomString(5);
+			setInterval(() => {
+				incrementMoney();
+				//if (game_started) {
+				startTimer();
+				//}
+				checkWin();
+
+				updateStats();
+
+				//saveCode[4] = randomString(5);
+				id("time-code").innerHTML = `<code>${rs+saveCode[4]}</code>`;
+			}, 1000);
+			//shuffle(ram);
+			//id("time-code").innerHTML = `<code>${timeSince}</code>`;
+
+			if (comingBack === true) {
+				toastInner = "Welcome back 👍";
+				toast(1000);
+			}
+
+
+			/*document.body.addEventListener("keydown", event => {
+			    if (event.code === "KeyS") {
+			        alert(game_started);
+			    }
+			});*/
+
+			saveNow = () => {
+				comingBack = true;
+
+				saveCode[0] = stats.money;
+				saveCode[1] = stats.mpc;
+				saveCode[2] = stats.mps;
+				saveCode[3] = winGame;
+				saveCode[4] = timeSince;
+				saveCode[5] = comingBack;
+
+				alert(`let saveCode = [${saveCode}];`);
+			}
+
+			if (window.innerWidth > 600) {
+				document.body.innerHTML = `
+                    <div style='padding:0 85px;overflow:hidden;'>
+                        <h1 style='font-weight:500;font-family:"roboto",sans-serif;padding-top:100px;'>Oh noes!</h1>
+                        <p class='p'>Looks like your screen isn't the right size. <br>Click <a href="https://www.khanacademy.org/computer-programming/energy-game-html/6207078986629120?width=600px" target="_blank">here</a> to play this game according to the proper width and height parameters.</p>
+                    </div>
+                    `;
+			} else {
+
+			}
+		} catch (e) {
+			document.body.innerHTML = e;
+		}
+	</script>
+	<script>
+		console.log("++++++++++++++++++++++++\n++ AspenBranch 2023 ++\n++++++++++++++++++++++++");
+	</script>
+	<!-- The Thumbnail Script 2.0.0 10/24/2023 by Bluebird@kaid_157624541333313939750668 -->
+	<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+	<script type>
+		var r = 600;
+		var s = document.documentElement.clientWidth;
+		window.parent.html2canvas = e => {
+			try {
+				html2canvas(document.body, {
+					width: s,
+					height: s,
+					useCORS: true,
+				}).then(e => {
+					var c = document.createElement("canvas");
+					c.width = r;
+					c.height = r;
+					c.getContext('2d').drawImage(e, 0, 0, e.width, e.height, 0, 0, r, r);
+					window.top.postMessage(c.toDataURL(), "*");
+				}).catch(e => {
+					alert("Thumbnail Script Error: " + e);
+				});
+			} catch {
+				window.top.postMessage(document.createElement("canvas").toDataURL(), "*");
+			}
+		};
+	</script>
+	<script type="application/javascript">
+		document.body.addEventListener("keydown", function(e) {
+			if (e.code === "Escape") {
+				document.body.innerHTML = `
+                        <div class='center' style='overflow:hidden;height:100%;width:100%;background-image:url("https://upload.wikimedia.org/wikipedia/commons/2/26/Plasma-lamp_2.jpg");background-size:105%;background-position:center;'>
+                            <h1 style="padding-top:102px;font-size:105px;margin-bottom:10px;letter-spacing:5px;color:rgb(255, 255, 255);">energy</h1>
+                            <p style="position: relative;top:-15px;height:0px;color:rgb(255, 255, 255);letter-spacing:4px;font-size:30px;text-shadow:5px 5px 10px rgba(0, 0, 0);">&ldquo;the ultimate clicker&rdquo;</p>
+                            <p style="position: relative;top:-352px;height:0px;color:rgb(255, 255, 255);letter-spacing:4px;font-size:30px;">260+ Votes!!!</p>
+                            <p style="position: relative;top:159px;height:0px;color:rgb(255, 255, 255);letter-spacing:2px;font-size:30px;font-family:'Roboto';">by LeaferStudios</p>
+                        </div>
+                    `;
+			}
+
+			if (e.code === "Enter") {
+				e.preventDefault();
+			}
+		});
+	</script>
+</body>
+
+</html>
